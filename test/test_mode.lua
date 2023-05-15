@@ -38,5 +38,3 @@ function TestMode:testMelodicMinorModes()
   luaunit.assertEquals(Mode.AEOLIAN_B5.intervals,    {2, 1, 2, 1, 2, 2, 2})
   luaunit.assertEquals(Mode.ALTERED_SCALE.intervals, {1, 2, 1, 2, 2, 2, 2})
 end
-
-luaunit.LuaUnit:run()

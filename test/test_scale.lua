@@ -208,5 +208,3 @@ function TestScale:testToSemitones()
     18
   })
 end
-
-luaunit.LuaUnit:run()

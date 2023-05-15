@@ -51,5 +51,3 @@ function TestNote:testToSemitone()
   local note = Note(NotesNames.G, -1)
   luaunit.assertEquals(note:to_semitone(), 6)
 end
-
-luaunit.LuaUnit:run()
