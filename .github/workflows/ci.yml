@@ -29,6 +29,8 @@ jobs:
       with:
         luaVersion: "5.4"
 
+      - uses: leafo/gh-actions-luarocks@v4
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
