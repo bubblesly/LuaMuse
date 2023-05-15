@@ -31,4 +31,6 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: lua run_utests.lua
+        run: |
+          luarocks install LuaUnit
+          lua run_utests.lua
