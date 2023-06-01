@@ -25,11 +25,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - uses: leafo/gh-actions-lua@v5
+      - uses: leafo/gh-actions-lua@v10
         with:
-          luaVersion: "5.4"
-
-      - uses: leafo/gh-actions-luarocks@v4
+          luaVersion: "5.4.4"
 
       - uses: leafo/gh-actions-luarocks@v4
 
