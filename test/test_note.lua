@@ -51,3 +51,14 @@ function TestNote:testToSemitone()
   local note = Note(NotesNames.G, -1)
   luaunit.assertEquals(note:to_semitone(), 6)
 end
+
+function TestNote:testEnharmonics()
+  luaunit.assertEquals(Note(NotesNames.A, -1):get_downward_enharmonic(), Note(NotesNames.G, 1))
+  luaunit.assertEquals(Note(NotesNames.A, -1):get_upward_enharmonic(), Note(NotesNames.B, -3))
+  luaunit.assertEquals(Note(NotesNames.B, 0):get_downward_enharmonic(), Note(NotesNames.A, 2))
+  luaunit.assertEquals(Note(NotesNames.B, 0):get_upward_enharmonic(), Note(NotesNames.C, -1))
+  luaunit.assertEquals(Note(NotesNames.F, 1):get_downward_enharmonic(), Note(NotesNames.E, 2))
+  luaunit.assertEquals(Note(NotesNames.F, 1):get_upward_enharmonic(), Note(NotesNames.G, -1))
+  luaunit.assertEquals(Note(NotesNames.C, 1):get_downward_enharmonic(), Note(NotesNames.B, 2))
+  luaunit.assertEquals(Note(NotesNames.C, 1):get_upward_enharmonic(), Note(NotesNames.D, -1))
+end
