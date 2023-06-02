@@ -208,3 +208,45 @@ function TestScale:testToSemitones()
     18
   })
 end
+
+function TestScale:testGetDownwardEnharmonics()
+  local g_flat_scale = Scale({
+    Note(NotesNames.G, -1),
+    Note(NotesNames.A, -1),
+    Note(NotesNames.B, -1),
+    Note(NotesNames.C, -1),
+    Note(NotesNames.D, -1),
+    Note(NotesNames.E, -1),
+    Note(NotesNames.F, 0)
+  })
+  luaunit.assertEquals(g_flat_scale:get_downward_enharmonic(), Scale({
+    Note(NotesNames.F, 1),
+    Note(NotesNames.G, 1),
+    Note(NotesNames.A, 1),
+    Note(NotesNames.B, 0),
+    Note(NotesNames.C, 1),
+    Note(NotesNames.D, 1),
+    Note(NotesNames.E, 1)
+  }))
+end
+
+function TestScale:testGetUpwardEnharmonics()
+  local f_sharp_scale = Scale({
+    Note(NotesNames.F, 1),
+    Note(NotesNames.G, 1),
+    Note(NotesNames.A, 1),
+    Note(NotesNames.B, 0),
+    Note(NotesNames.C, 1),
+    Note(NotesNames.D, 1),
+    Note(NotesNames.E, 1)
+  })
+  luaunit.assertEquals(f_sharp_scale:get_upward_enharmonic(), Scale({
+    Note(NotesNames.G, -1),
+    Note(NotesNames.A, -1),
+    Note(NotesNames.B, -1),
+    Note(NotesNames.C, -1),
+    Note(NotesNames.D, -1),
+    Note(NotesNames.E, -1),
+    Note(NotesNames.F, 0)
+  }))
+end

@@ -121,3 +121,11 @@ function Scale:to_semitones()
   end
   return result
 end
+
+function Scale:get_downward_enharmonic()
+  return Scale(Array(self.notes):map(function(note) return note:get_downward_enharmonic() end))
+end
+
+function Scale:get_upward_enharmonic()
+  return Scale(Array(self.notes):map(function(note) return note:get_upward_enharmonic() end))
+end
