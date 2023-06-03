@@ -81,7 +81,7 @@ end
 --[[
   Returns a new scale based on self, adding an alteration
   note_offset: 
-   * 1 => root, no rotation
+   * 1 => root
    * 2 => 2nd
    * 3 => 3rd
    etc
@@ -128,4 +128,53 @@ end
 
 function Scale:get_upward_enharmonic()
   return Scale(Array(self.notes):map(function(note) return note:get_upward_enharmonic() end))
+end
+
+function Scale:tostring()
+  local f = function(acc, n)
+    return acc .. " " .. n:tostring()
+  end
+  return Array(self.notes):fold_left("{", f) .. "}"
+end
+
+function Scale:get_distance(other_scale)
+  function compare_scales(ref, scale)
+    local f = function(acc, elt)
+      if elt ~= 0 then
+        return acc + 1
+      else
+        return acc
+      end
+    end
+    local alterations_diff = Array(scale.notes)
+      :zip(ref.notes)
+      :map(function(e) return e[1].alteration - e[2].alteration end)
+    return alterations_diff:fold_left(0, f)
+  end
+  function align_scales(ref, scale)
+    local rotation = (ref.notes[1].name - scale.notes[1].name + 8) % 7
+    return scale:rotate(rotation)
+  end
+
+  function align_downward(ref, scale)
+    local rotation = (ref.notes[1].name - scale.notes[1].name + 8) % 7
+    return scale:rotate(rotation)
+  end
+
+  local aligned = align_scales(self, other_scale)
+  local closest_up_or_downward = aligned
+    :rotate(7)
+    :get_upward_enharmonic()
+  if self.notes[1].alteration - aligned.notes[1].alteration > 0 then
+    closest_up_or_downward = aligned
+      :rotate(2)
+      :get_downward_enharmonic()
+  end
+  print(compare_scales(self, aligned))
+  print(compare_scales(self, closest_up_or_downward))
+  print(self:tostring())
+  print(other_scale:tostring())
+  print(aligned:tostring())
+  print(closest_up_or_downward:tostring())
+  return math.min(compare_scales(self, aligned), compare_scales(self, closest_up_or_downward)) 
 end
