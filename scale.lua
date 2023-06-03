@@ -170,11 +170,5 @@ function Scale:get_distance(other_scale)
       :rotate(2)
       :get_downward_enharmonic()
   end
-  print(compare_scales(self, aligned))
-  print(compare_scales(self, closest_up_or_downward))
-  print(self:tostring())
-  print(other_scale:tostring())
-  print(aligned:tostring())
-  print(closest_up_or_downward:tostring())
   return math.min(compare_scales(self, aligned), compare_scales(self, closest_up_or_downward)) 
 end
