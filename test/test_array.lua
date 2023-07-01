@@ -56,5 +56,3 @@ function TestArray:testAccTableValues()
   local a = Array{1, 2, 3, 4}
   luaunit.assertEquals(a:acc_table_values(), {1, 3, 6, 10})
 end
-
-luaunit.LuaUnit:run()

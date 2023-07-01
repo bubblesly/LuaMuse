@@ -12,12 +12,12 @@ setmetatable(Scale, {
 
 function Scale.new(notes)
   local self = setmetatable({}, Scale)
-  self.notes = notes
+  self.notes = Array(notes)
   return self
 end
 
 function Scale:clone()
-  return Scale(Array(self.notes):clone())
+  return Scale(self.notes:clone())
 end
 
 function Scale:transpose(new_tonic)
@@ -28,7 +28,7 @@ function Scale:transpose(new_tonic)
   local rotation_induced_alterations = semi_tones
     :diff_values(rotated_semi_tones)
     :acc_table_values()
-  local self_alterations = Array(self.notes):map(function(n) return n.alteration end)
+  local self_alterations = self.notes:map(function(n) return n.alteration end)
   local final_alterations = rotation_induced_alterations
     :map(
       function(alt)
@@ -40,7 +40,7 @@ function Scale:transpose(new_tonic)
     :map(function(elt)
       return elt[1] + elt[2]
     end)
-  return Scale(Array(self.notes)
+  return Scale(self.notes
     :rotate_values(transpose_distance)
     :zip(final_alterations)
     :map(function(elt)
@@ -74,14 +74,14 @@ end
 
 ]]
 function Scale:rotate(note_offset)
-  local notes = Array(self.notes):rotate_values(note_offset - 1)
+  local notes = self.notes:rotate_values(note_offset - 1)
   return Scale(notes)
 end
 
 --[[
   Returns a new scale based on self, adding an alteration
   note_offset: 
-   * 1 => root, no rotation
+   * 1 => root
    * 2 => 2nd
    * 3 => 3rd
    etc
@@ -96,11 +96,11 @@ function Scale:add_alteration(note_offset, alteration)
 end
 
 function Scale:add_alterations(alterations)
-  local new_alterations = Array(self.notes)
+  local new_alterations = self.notes
     :map(function(n) return n.alteration end)
     :zip(alterations)
     :map(function(e) return e[1] + e[2] end)
-  local new_notes = Array(self.notes)
+  local new_notes = self.notes
     :zip(new_alterations)
     :map(function(e) return Note(e[1].name, e[2]) end)
   return Scale(new_notes)
@@ -120,4 +120,60 @@ function Scale:to_semitones()
     table.insert(result, st)
   end
   return result
+end
+
+function Scale:get_downward_enharmonic()
+  return Scale(self.notes:map(function(note) return note:get_downward_enharmonic() end))
+end
+
+function Scale:get_upward_enharmonic()
+  return Scale(self.notes:map(function(note) return note:get_upward_enharmonic() end))
+end
+
+function Scale:tostring()
+  local f = function(acc, n)
+    return acc .. " " .. n:tostring()
+  end
+  return self.notes:fold_left("{", f) .. "}"
+end
+
+function Scale:get_distance(other_scale)
+  function compare_scales(ref, scale)
+    local f = function(acc, elt)
+      if elt ~= 0 then
+        return acc + 1
+      else
+        return acc
+      end
+    end
+    local alterations_diff = Array(scale.notes)
+      :zip(ref.notes)
+      :map(function(e) return e[1].alteration - e[2].alteration end)
+    return alterations_diff:fold_left(0, f)
+  end
+  function align_scales(ref, scale)
+    local rotation = (ref.notes[1].name - scale.notes[1].name + 8) % 7
+    return scale:rotate(rotation)
+  end
+
+  function align_downward(ref, scale)
+    local rotation = (ref.notes[1].name - scale.notes[1].name + 8) % 7
+    return scale:rotate(rotation)
+  end
+
+  local aligned = align_scales(self, other_scale)
+  local closest_up_or_downward = aligned
+    :rotate(7)
+    :get_upward_enharmonic()
+  if self.notes[1].alteration - aligned.notes[1].alteration > 0 then
+    closest_up_or_downward = aligned
+      :rotate(2)
+      :get_downward_enharmonic()
+  end
+  return math.min(compare_scales(self, aligned), compare_scales(self, closest_up_or_downward)) 
+end
+
+function Scale:get_note_from_degree(degree)
+  local note = self.notes[degree.name]
+  return Note(note.name, note.alteration + degree.alteration)
 end

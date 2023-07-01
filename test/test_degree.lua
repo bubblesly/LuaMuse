@@ -29,5 +29,3 @@ function TestDegree:testToStringForFlat()
   luaunit.assertEquals(degree:name_tostring(), "V")
   luaunit.assertEquals(degree:alteration_tostring(), "♭")
 end
-
-luaunit.LuaUnit:run()

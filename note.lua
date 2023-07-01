@@ -125,3 +125,43 @@ end
 function Note:tostring()
   return self:name_tostring() .. self:alteration_tostring()
 end
+
+function Note:get_downward_enharmonic()
+  if self.name ==  NotesNames.C then
+    return Note(NotesNames.B, self.alteration + 1)
+  elseif self.name ==  NotesNames.D then
+    return Note(NotesNames.C, self.alteration + 2)
+  elseif self.name ==  NotesNames.E then
+    return Note(NotesNames.D, self.alteration + 2)
+  elseif self.name ==  NotesNames.F then
+    return Note(NotesNames.E, self.alteration + 1)
+  elseif self.name ==  NotesNames.G then
+    return Note(NotesNames.F, self.alteration + 2)
+  elseif self.name ==  NotesNames.A then
+    return Note(NotesNames.G, self.alteration + 2)
+  elseif self.name ==  NotesNames.B then
+    return Note(NotesNames.A, self.alteration + 2)
+  else
+    return "ERROR"
+  end
+end
+
+function Note:get_upward_enharmonic()
+  if self.name ==  NotesNames.C then
+    return Note(NotesNames.D, self.alteration - 2)
+  elseif self.name ==  NotesNames.D then
+    return Note(NotesNames.E, self.alteration - 2)
+  elseif self.name ==  NotesNames.E then
+    return Note(NotesNames.F, self.alteration - 1)
+  elseif self.name ==  NotesNames.F then
+    return Note(NotesNames.G, self.alteration - 2)
+  elseif self.name ==  NotesNames.G then
+    return Note(NotesNames.A, self.alteration - 2)
+  elseif self.name ==  NotesNames.A then
+    return Note(NotesNames.B, self.alteration - 2)
+  elseif self.name ==  NotesNames.B then
+    return Note(NotesNames.C, self.alteration - 1)
+  else
+    return "ERROR"
+  end
+end
