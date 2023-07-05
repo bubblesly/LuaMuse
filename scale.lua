@@ -106,6 +106,28 @@ function Scale:add_alterations(alterations)
   return Scale(new_notes)
 end
 
+--[[
+  Given a major scale, rotate n steps on the circle of fifth
+]]
+function Scale:cfifth_rotate(n)
+  local new_scale = self:clone()
+  if n%1 ~= 0 then
+    return "Error"
+  else
+    if n > 0 then
+      for i = 1,n do
+        new_scale = self:add_alteration(4,1):rotate(5)
+      end
+    elseif n < 0 then
+      for i = 1,-n do
+        new_scale = self:add_alteration(7,-1):rotate(-3)
+      end
+    end
+  end
+  return new_scale
+end
+
+
 function Scale:to_semitones()
   local result = {}
   local last = 0
