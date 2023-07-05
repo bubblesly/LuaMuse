@@ -116,13 +116,15 @@ function Scale:cfifth_rotate(n)
   else
     if n > 0 then
       for i = 1,n do
-        new_scale = self:add_alteration(4,1):rotate(5)
+        new_scale = new_scale:add_alteration(4,1):rotate(5) --:get_upward_enharmonic()
       end
     elseif n < 0 then
       for i = 1,-n do
-        new_scale = self:add_alteration(7,-1):rotate(-3)
+        new_scale = new_scale:add_alteration(7,-1):rotate(-3) --:get_downward_enharmonic()
       end
     end
+    st = new_scale:to_semitones()
+    new_scale = Scale.get_major(Note.from_semitone(st[1]))
   end
   return new_scale
 end
