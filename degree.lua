@@ -31,6 +31,12 @@ function Degree:clone()
   return Degree(self.name, self.alteration)
 end
 
+function Degree:offset(offset)
+  local deg = self:clone()
+  deg.name = (deg.name - 1 + offset) % 7 + 1
+  return deg
+end
+
 function Degree:name_tostring()
   if self.name == 1 then
     return "I"
