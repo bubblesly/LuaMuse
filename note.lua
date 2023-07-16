@@ -66,6 +66,16 @@ function Note.from_semitone(st, prec)
   end
 end
 
+function Note:offset(note_offset, semitones)
+  local note_name = (self.name + note_offset - 1) % 7 + 1
+  local note = Note(note_name, 0)
+  local semitones1 = self:to_semitone()
+  local semitones2 = note:to_semitone()
+  local diff = (semitones2 - semitones1 + 12) % 12
+  note.alteration = semitones - diff
+  return note
+end
+
 function Note:to_semitone()
   if self.name == NotesNames.C then
     return 0 + self.alteration

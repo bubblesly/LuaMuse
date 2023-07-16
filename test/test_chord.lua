@@ -34,3 +34,23 @@ function TestChord:testChordBuilder()
     :build()
   luaunit.assertEquals(chord:tostring(), "FΔ7add13")
 end
+
+function TestChord:test_to_notes()
+  local tones = ChordTones
+    :minor()
+    :add_seventh(ToneAlterations.MINOR)
+    :add_extension(ChordToneNames.ELEVENTH, ToneAlterations.NONE)
+  local c = Chord(Note(NotesNames.D, 1), tones)
+  local expected = {Note(NotesNames.D, 1), Note(NotesNames.F, 1), Note(NotesNames.A, 1), Note(NotesNames.C, 1), Note(NotesNames.G, 1)}
+  luaunit.assertEquals(c:to_notes(), expected)
+end
+
+function TestChord:test_to_asc_semitones()
+  local tones = ChordTones
+    :minor()
+    :add_seventh(ToneAlterations.MINOR)
+    :add_extension(ChordToneNames.ELEVENTH, ToneAlterations.NONE)
+  local c = Chord(Note(NotesNames.D, 1), tones)
+  local expected = {3, 6, 10, 13, 20}
+  luaunit.assertEquals(c:to_ascending_semitones(), expected)
+end
