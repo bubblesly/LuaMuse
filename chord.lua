@@ -161,8 +161,6 @@ function ChordTones:tostring()
     local ext = ""
     if tones[ChordToneNames.NINTH] == ToneAlterations.NONE then
       ext = ext .. "add9"
-    elseif tones[ChordToneNames.NINTH] == ToneAlterations.SHARP then
-      ext = ext .. "add" .. SHARP .. "9"
     elseif tones[ChordToneNames.NINTH] == ToneAlterations.FLAT then
       ext = ext .. "add" .. FLAT .. "9"
     end
@@ -170,19 +168,93 @@ function ChordTones:tostring()
       ext = ext .. "add11"
     elseif tones[ChordToneNames.ELEVENTH] == ToneAlterations.SHARP then
       ext = ext .. "add" .. SHARP .. "11"
-    elseif tones[ChordToneNames.ELEVENTH] == ToneAlterations.FLAT then
-      ext = ext .. "add" .. FLAT .. "11"
     end
     if tones[ChordToneNames.THIRTEENTH] == ToneAlterations.NONE then
       ext = ext .. "add13"
-    elseif tones[ChordToneNames.THIRTEENTH] == ToneAlterations.SHARP then
-      ext = ext .. "add" .. SHARP .. "13"
     elseif tones[ChordToneNames.THIRTEENTH] == ToneAlterations.FLAT then
       ext = ext .. "add" .. FLAT .. "13"
     end
     return ext
   end
   return chordal_tones_tostring(self.tones) .. extensions_tostring(self.tones)
+end
+
+function ChordTones:to_notes(tonic)
+  function get_third(tonic)
+    local third = nil
+    if self.tones[ChordToneNames.THIRD] == ToneAlterations.MAJOR then
+      third = tonic:offset(2, 4)
+    elseif self.tones[ChordToneNames.THIRD] == ToneAlterations.MINOR then
+      third = tonic:offset(2, 3)
+    elseif self.tones[ChordToneNames.THIRD] == ToneAlterations.SUS2 then
+      third = tonic:offset(1, 2)
+    elseif self.tones[ChordToneNames.THIRD] == ToneAlterations.SUS4 then
+      third = tonic:offset(3, 5)
+    end
+    return third
+  end
+  function get_fifth(tonic)
+    local fifth = nil
+    if self.tones[ChordToneNames.FIFTH] == ToneAlterations.PERFECT then
+      fifth = tonic:offset(4, 7)
+    elseif self.tones[ChordToneNames.FIFTH] == ToneAlterations.DIMINISHED then
+      fifth = tonic:offset(4, 6)
+    elseif self.tones[ChordToneNames.FIFTH] == ToneAlterations.AUGMENTED then
+      fifth = tonic:offset(4, 8)
+    end
+    return fifth
+  end
+  function get_seventh(tonic)
+    local seventh = nil
+    if self.tones[ChordToneNames.SEVENTH] == ToneAlterations.MAJOR then
+      seventh = tonic:offset(6, 11)
+    elseif self.tones[ChordToneNames.SEVENTH] == ToneAlterations.MINOR then
+      seventh = tonic:offset(6, 10)
+    elseif self.tones[ChordToneNames.SEVENTH] == ToneAlterations.DIMINISHED then
+      seventh = tonic:offset(6, 9)
+    end
+    return seventh
+  end
+  function get_ninth(tonic)
+    local ninth = nil
+    if self.tones[ChordToneNames.NINTH] == ToneAlterations.FLAT then
+      ninth = tonic:offset(1, 1)
+    elseif self.tones[ChordToneNames.NINTH] == ToneAlterations.NONE then
+      ninth = tonic:offset(1, 2)
+    end
+    return ninth
+  end
+  function get_eleventh(tonic)
+    local eleventh = nil
+    if self.tones[ChordToneNames.ELEVENTH] == ToneAlterations.NONE then
+      eleventh = tonic:offset(3, 5)
+    elseif self.tones[ChordToneNames.ELEVENTH] == ToneAlterations.SHARP then
+      eleventh = tonic:offset(3, 6)
+    end
+    return eleventh
+  end
+  function get_thirteenth(tonic)
+    local thirteenth = nil
+    if self.tones[ChordToneNames.THIRTEENTH] == ToneAlterations.FLAT then
+      thirteenth = tonic:offset(5, 8)
+    elseif self.tones[ChordToneNames.THIRTEENTH] == ToneAlterations.NONE then
+      thirteenth = tonic:offset(5, 9)
+    end
+    return thirteenth
+  end
+  function add_if_not_nil(a, elt)
+    if elt ~= nil then
+      table.insert(a, elt)
+    end
+  end
+  local notes = {}
+  add_if_not_nil(notes, get_third(tonic))
+  add_if_not_nil(notes, get_fifth(tonic))
+  add_if_not_nil(notes, get_seventh(tonic))
+  add_if_not_nil(notes, get_ninth(tonic))
+  add_if_not_nil(notes, get_eleventh(tonic))
+  add_if_not_nil(notes, get_thirteenth(tonic))
+  return notes
 end
 
 Chord = {}
@@ -207,6 +279,32 @@ end
 
 function Chord:tostring()
   return self.tonic:tostring() .. self.tones:tostring()
+end
+
+function Chord:to_notes()
+  local notes = Array(self.tones:to_notes(self.tonic)):clone()
+  table.insert(notes, 1, self.tonic)
+  return notes
+end
+
+function Chord:to_ascending_semitones()
+  local f = function(n) return n:to_semitone() end
+  local semitones = self:to_notes():map(f)
+  local asc_semitones = {}
+  for k = 1, #semitones do
+    if k > 1 then
+      local octaves_k_pred = math.floor(asc_semitones[k - 1] / 12)
+      local v = semitones[k] + 12 * octaves_k_pred
+      if v < asc_semitones[k - 1] then
+        asc_semitones[k] = semitones[k] + 12 * (octaves_k_pred + 1)
+      else
+        asc_semitones[k] = v
+      end
+    else 
+      asc_semitones[k] = semitones[k]
+    end
+  end
+  return asc_semitones
 end
 
 ChordBuilder = {}
