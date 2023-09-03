@@ -1,4 +1,6 @@
 require('../scale')
+require('../note')
+require('../mode')
 luaunit = require('luaunit')
 
 TestScale = {}
@@ -7,6 +9,32 @@ function TestScale:setUp()
 end
 
 function TestScale:tearDown()
+end
+
+function TestScale:testFromTonicAndMode()
+  local esharp = Note(NotesNames.E, 1)
+  local esharp_locrian = Scale.from_tonic_and_mode(esharp, Mode.LOCRIAN)
+  luaunit.assertEquals(esharp_locrian.notes, {
+    Note(NotesNames.E, 1),
+    Note(NotesNames.F, 1),
+    Note(NotesNames.G, 1),
+    Note(NotesNames.A, 1),
+    Note(NotesNames.B, 0),
+    Note(NotesNames.C, 1),
+    Note(NotesNames.D, 1)
+  })
+end
+
+function TestScale:testGetTonic()
+  local esharp = Note(NotesNames.E, 1)
+  local esharp_locrian = Scale.from_tonic_and_mode(esharp, Mode.LOCRIAN)
+  luaunit.assertEquals(esharp_locrian:get_tonic(), esharp)
+end
+
+function TestScale:testGetMode()
+  local esharp = Note(NotesNames.E, 1)
+  local esharp_locrian = Scale.from_tonic_and_mode(esharp, Mode.LOCRIAN)
+  luaunit.assertEquals(esharp_locrian:get_mode(), Mode.LOCRIAN)
 end
 
 function TestScale:testCMajor()
