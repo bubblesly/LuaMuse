@@ -35,7 +35,7 @@ function Scale:get_mode()
   local intervals = semi_tones:rotate_values(1)
     :zip(semi_tones)
     :map(function(e) return (e[1] - e[2]) % 12 end)
-  return Mode(intervals)
+  return Mode.from_intervals(intervals)
 end
 
 function Scale:transpose(new_tonic)
