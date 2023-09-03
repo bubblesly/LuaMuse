@@ -38,3 +38,10 @@ function TestMode:testMelodicMinorModes()
   luaunit.assertEquals(Mode.AEOLIAN_B5.intervals,    {2, 1, 2, 1, 2, 2, 2})
   luaunit.assertEquals(Mode.ALTERED_SCALE.intervals, {1, 2, 1, 2, 2, 2, 2})
 end
+
+function TestMode:testGetAlterations()
+  luaunit.assertEquals(Mode.IONIAN:get_alterations(Mode.IONIAN),     {0, 0,  0, 0, 0,  0,  0})
+  luaunit.assertEquals(Mode.IONIAN:get_alterations(Mode.AEOLIAN),    {0, 0,  1, 0, 0,  1,  1})
+  luaunit.assertEquals(Mode.AEOLIAN:get_alterations(Mode.IONIAN),    {0, 0, -1, 0, 0, -1, -1})
+  luaunit.assertEquals(Mode.MEL_MINOR:get_alterations(Mode.AEOLIAN), {0, 0,  0, 0, 0,  1,  1})
+end

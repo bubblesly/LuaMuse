@@ -16,8 +16,30 @@ function Scale.new(notes)
   return self
 end
 
+function Scale.from_tonic_and_mode(tonic, mode)
+  local c_maj = Scale.c_major()
+  local alterations = mode:get_alterations(Mode.IONIAN)
+  return c_maj:add_alterations(alterations):transpose(tonic)
+end
+
 function Scale:clone()
   return Scale(self.notes:clone())
+end
+
+function Scale:get_tonic()
+  return self.notes[1]
+end
+
+function Scale:get_mode()
+  local size = #(self.notes)
+  local semi_tones = self:to_semitones()
+  local intervals = {}
+  for i=0, size - 1 do
+    local st1 = semi_tones[i % size + 1]
+    local st2 = semi_tones[(i + 1) % size + 1]
+    table.insert(intervals, (st2 - st1) % 12)
+  end
+  return Mode(intervals)
 end
 
 function Scale:transpose(new_tonic)
