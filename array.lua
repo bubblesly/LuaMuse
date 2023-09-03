@@ -77,6 +77,15 @@ function Array:map(f)
   return Array(a)
 end
 
+function Array:find(f)
+  for i, v in ipairs(self) do
+    if f(v) then
+      return v
+    end
+  end
+  return nil
+end
+
 function Array:zip(tbl)
   local new_tbl = {}
   local size = math.max(#self, #tbl)
@@ -131,4 +140,11 @@ function Array:acc_table_values()
     return acc
   end
   return self:fold_left(Array{}, f)
+end
+
+function Array:equals(array)
+  local equal_values = self:zip(array):fold_left(true, function(acc, e) return acc and (e[1] == e[2]) end)
+  return getmetatable(array) == Array 
+    and #self == #array
+    and equal_values 
 end
