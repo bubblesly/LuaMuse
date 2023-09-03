@@ -31,14 +31,10 @@ function Scale:get_tonic()
 end
 
 function Scale:get_mode()
-  local size = #(self.notes)
-  local semi_tones = self:to_semitones()
-  local intervals = {}
-  for i=0, size - 1 do
-    local st1 = semi_tones[i % size + 1]
-    local st2 = semi_tones[(i + 1) % size + 1]
-    table.insert(intervals, (st2 - st1) % 12)
-  end
+  local semi_tones = Array(self:to_semitones())
+  local intervals = semi_tones:rotate_values(1)
+    :zip(semi_tones)
+    :map(function(e) return (e[1] - e[2]) % 12 end)
   return Mode(intervals)
 end
 
