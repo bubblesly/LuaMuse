@@ -83,6 +83,30 @@ function Scale.c_major()
 end
 
 --[[
+  Warning: only works for ionian scales
+]]
+function Scale:to_the_left_on_circle_of_5ths(iterations)
+  if iterations == 0 then
+    return self
+  end
+  return self:rotate(4)
+    :add_alteration(4, -1)
+    :to_the_left_on_circle_of_5ths(iterations -1)
+end
+
+--[[
+  Warning: only works for ionian scales
+]]
+function Scale:to_the_right_on_circle_of_5ths(iterations)
+  if(iterations == 0) then
+    return self
+  end
+  return self:rotate(5)
+    :add_alteration(7, 1)
+    :to_the_right_on_circle_of_5ths(iterations -1)
+end
+
+--[[
   Returns a new scale based on self, rotated from note_offset
   note_offset: 
    * 1 => root, no rotation

@@ -166,6 +166,36 @@ function TestScale:testClone()
   luaunit.assertNotIs(c_major, clone)
 end
 
+function TestScale:testToTheLeftOnCircleOf5ths()
+  local c_major = Scale.c_major()
+  luaunit.assertEquals(c_major:to_the_left_on_circle_of_5ths(2), Scale({
+    Note(NotesNames.B, -1),
+    Note(NotesNames.C, 0),
+    Note(NotesNames.D, 0),
+    Note(NotesNames.E, -1),
+    Note(NotesNames.F, 0),
+    Note(NotesNames.G, 0),
+    Note(NotesNames.A, 0),
+  }))
+  luaunit.assertEquals(c_major:to_the_left_on_circle_of_5ths(1)
+    :to_the_right_on_circle_of_5ths(1), c_major)
+end
+
+function TestScale:testToTheRightOnCircleOf5ths()
+  local c_major = Scale.c_major()
+  luaunit.assertEquals(c_major:to_the_right_on_circle_of_5ths(3), Scale({
+    Note(NotesNames.A, 0),
+    Note(NotesNames.B, 0),
+    Note(NotesNames.C, 1),
+    Note(NotesNames.D, 0),
+    Note(NotesNames.E, 0),
+    Note(NotesNames.F, 1),
+    Note(NotesNames.G, 1),
+  }))
+  luaunit.assertEquals(c_major:to_the_right_on_circle_of_5ths(1)
+    :to_the_left_on_circle_of_5ths(1), c_major)
+end
+
 function TestScale:testRotate()
   local c_major = Scale.c_major()
   luaunit.assertEquals(c_major:rotate(1), Scale.c_major())
