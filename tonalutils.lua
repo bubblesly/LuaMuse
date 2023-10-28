@@ -4,8 +4,8 @@ local tonalutils = {}
 
 local SHARP <const> = "♯"
 local FLAT <const> = "♭"
-local HALF_DIMINUISHED <const> = "\u{E871}"
-local DIMINUISHED <const> = "\u{E870}"
+local HALF_DIMINISHED <const> = "\u{E871}"
+local DIMINISHED <const> = "\u{E870}"
 
 function tonalutils.get_alterations(tonality)
   function iterate_on_circle_of_fifths(tonic, direction, max_depth, pos, nb_alterations)
@@ -185,9 +185,9 @@ function tonalutils.get_seventh_chord_name(root, third, fifth, seventh, tonality
   else if third == 3 && fifth == 7 && seventh == 10 then
     result = result .. "min7"
   else if third == 3 && fifth == 6 && seventh == 10 then
-    result = result .. HALF_DIMINUISHED
+    result = result .. HALF_DIMINISHED
   else if third == 3 && fifth == 6 && seventh == 9 then
-    result = result .. DIMINUISHED
+    result = result .. DIMINISHED
   else
     result = result .. "ERROR"
   end
