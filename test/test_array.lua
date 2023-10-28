@@ -46,7 +46,7 @@ function TestArray:testFoldLeft()
   luaunit.assertEquals(a:fold_left(0, function(acc, e) return acc + e end), 10)
 end
 
-function TestArray:testFoldLeft()
+function TestArray:testFoldLeft2()
   local a = Array{1, 2, 3, 4}
   local f = function(acc, e) return acc + e end
   luaunit.assertEquals(a:fold_left(0, f), 10)
