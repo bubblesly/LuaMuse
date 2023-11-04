@@ -86,6 +86,12 @@ function Array:find(f)
   return nil
 end
 
+function Array:sort(f)
+  local sorted = self:clone()
+  table.sort(sorted, f)
+  return sorted
+end
+
 function Array:zip(tbl)
   local new_tbl = {}
   local size = math.max(#self, #tbl)
