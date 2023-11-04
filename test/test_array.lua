@@ -56,3 +56,8 @@ function TestArray:testAccTableValues()
   local a = Array{1, 2, 3, 4}
   luaunit.assertEquals(a:acc_table_values(), {1, 3, 6, 10})
 end
+
+function TestArray:testSort()
+  local a = Array{3, 2, 4, 1}
+  luaunit.assertEquals(a:sort(), {1, 2, 3, 4})
+end
