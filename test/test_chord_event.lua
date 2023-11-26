@@ -21,5 +21,5 @@ end
 
 function TestChordEvent:testGetTimeIndex()
   local evt = ChordEvent(Time(2, 3, 8), Chord(Note(NotesNames.A, 0), ChordTones.minor()))
-  luaunit.assertEquals(evt:get_time_index(), math.floor(256 + 3 * 256 / 8.0))
+  luaunit.assertEquals(evt:get_time_index(), math.floor(BAR_DIVISION + 3 * BAR_DIVISION / 8.0))
 end

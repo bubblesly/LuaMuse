@@ -9,10 +9,10 @@ setmetatable(Part, {
   end,
 })
 
-function Part.new(timeSignature, nbBars, chord_events)
+function Part.new(time_signature, nb_bars, chord_events)
   local self = setmetatable({}, Part)
-  self.timeSignature = timeSignature
-  self.nbBars = nbBars
+  self.time_signature = time_signature
+  self.nb_bars = nb_bars
   local evts = Array(chord_events)
   function less_than(evt1, evt2)
     return evt1.time:to_time_index() < evt1.time:to_time_index()
@@ -23,13 +23,13 @@ function Part.new(timeSignature, nbBars, chord_events)
 end
 
 function Part:clone()
-  return Part(self.timeSignature, self.nbBars, self.chord_events:clone())
+  return Part(self.time_signature, self.nb_bars, self.chord_events:clone())
 end
 
 function Part:add_chord_event(chord_evt)
   local evts = self.chord_events:clone()
   evts:push_tail(chord_evt)
-  return Part(self.timeSignature:clone(), nbBars, evts)
+  return Part(self.time_signature:clone(), nb_bars, evts)
 end
 
 function Part:get_current_chord(time)
