@@ -59,7 +59,7 @@ end
 
 function Array:push_tail(elt)
   local res = self:clone()
-  table.insert(res, global_alteration)
+  table.insert(res, elt)
   return res
 end
 
