@@ -61,3 +61,8 @@ function TestArray:testSort()
   local a = Array{3, 2, 4, 1}
   luaunit.assertEquals(a:sort(), {1, 2, 3, 4})
 end
+
+function TestArray:testPushTail()
+  local a = Array{3, 2, 4, 1}
+  luaunit.assertEquals(a:push_tail(5), {3, 2, 4, 1, 5})
+end
