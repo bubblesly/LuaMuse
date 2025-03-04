@@ -107,6 +107,22 @@ function Scale:to_the_right_on_circle_of_5ths(iterations)
 end
 
 --[[
+  Warning: only works for ionian scales
+]]
+function Scale:circle_of_5ths_rotate(iterations)
+  if(iterations == 0) then
+    return self
+  elseif(iterations < 0) then
+    return self:to_the_left_on_circle_of_5ths(-iterations)
+  elseif(iterations > 0) then
+    return self:to_the_right_on_circle_of_5ths(iterations)
+  else
+    return "Error"
+  end
+end
+
+
+--[[
   Returns a new scale based on self, rotated from note_offset
   note_offset: 
    * 1 => root, no rotation
