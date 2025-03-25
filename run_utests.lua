@@ -12,6 +12,5 @@ require('test/tracks/test_clip')
 require('test/tracks/test_clip_array')
 require('test/tracks/test_event')
 require('test/tracks/test_event_array')
-require('test/test-circleof5ths')
 
 os.exit( lu.LuaUnit.run() )

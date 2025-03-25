@@ -360,3 +360,25 @@ function TestScale:testGetDistance()
   luaunit.assertEquals(f_sharp_maj:get_distance(d_sharp_min), 0)
   luaunit.assertEquals(f_sharp_maj:get_distance(d_sharp_min_harm), 1)
 end
+
+function TestScale:test_c5ths_totheleft()
+  local c_major = Scale.c_major()
+  local next = c_major:to_the_left_on_circle_of_5ths(1)
+  -- print(next:tostring())
+  for i=1,11 do
+      next = next:to_the_left_on_circle_of_5ths(1)
+      -- print(next:tostring())
+  end
+  luaunit.assertEquals(next, Scale.c_major())
+end
+
+function TestScale:test_c5ths_totheright()
+  local c_major = Scale.c_major()
+  local next = c_major:to_the_right_on_circle_of_5ths(1)
+  -- print(next:tostring())
+  for i=1,11 do
+      next = next:to_the_right_on_circle_of_5ths(1)
+      -- print(next:tostring())
+  end
+  luaunit.assertEquals(next, Scale.c_major())
+end
