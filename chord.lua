@@ -336,6 +336,20 @@ function ChordBuilder:clone()
   return b
 end
 
+-- extensions is a table of 4 elements, false or true
+-- the first element is the seventh,
+-- the second is the ninth,
+-- the third is the eleventh,
+-- the fourth is the thirteenth
+function ChordBuilder:extend(extensions)
+  local b = self:clone()
+  b.seventh = extensions[1]
+  b.ninth = extensions[2]
+  b.eleventh = extensions[3]
+  b.thirteenth = extensions[4]
+  return b
+end
+
 function ChordBuilder:withSeventh()
   local b = self:clone()
   b.seventh = true
