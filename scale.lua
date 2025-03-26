@@ -82,6 +82,10 @@ function Scale.c_major()
   })
 end
 
+function Scale:count_alterations()
+  return self.notes:map(function(n) return n.alteration end):sum()
+end
+
 --[[
   Warning: only works for ionian scales
 ]]
@@ -89,9 +93,14 @@ function Scale:to_the_left_on_circle_of_5ths(iterations)
   if iterations == 0 then
     return self
   end
-  return self:rotate(4)
-    :add_alteration(4, -1)
-    :to_the_left_on_circle_of_5ths(iterations -1)
+  out = self:clone()
+  for i = 1, iterations do
+    out = out:rotate(4):add_alteration(4, -1)
+  end
+  if out:count_alterations() < -7 then
+    out = out:to_the_right_on_circle_of_5ths(12)
+  end
+  return out
 end
 
 --[[
@@ -101,9 +110,14 @@ function Scale:to_the_right_on_circle_of_5ths(iterations)
   if(iterations == 0) then
     return self
   end
-  return self:rotate(5)
-    :add_alteration(7, 1)
-    :to_the_right_on_circle_of_5ths(iterations -1)
+  out = self:clone()
+  for i = 1, iterations do
+    out = out:rotate(5):add_alteration(7, 1)
+  end
+  if out:count_alterations() > 7 then
+    out = out:to_the_left_on_circle_of_5ths(12)
+  end
+  return out
 end
 
 --[[
