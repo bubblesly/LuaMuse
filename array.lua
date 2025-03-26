@@ -154,3 +154,11 @@ function Array:equals(array)
     and #self == #array
     and equal_values 
 end
+
+function Array:sum()
+  local total = 0
+  for _, value in ipairs(self) do
+    total = total + value
+  end
+  return total
+end
