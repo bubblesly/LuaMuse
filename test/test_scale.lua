@@ -368,4 +368,10 @@ function TestScale:test_c5ths_rotate()
   luaunit.assertEquals(c_major:circle_of_5ths_rotate(-8), c_major:circle_of_5ths_rotate(4))
   luaunit.assertEquals(c_major:circle_of_5ths_rotate(123), c_major:circle_of_5ths_rotate(3))
   luaunit.assertEquals(c_major:circle_of_5ths_rotate(-123), c_major:circle_of_5ths_rotate(-3))
+
+  local next = c_major:circle_of_5ths_rotate(1)
+  for i = 1,11 do
+    next = next:circle_of_5ths_rotate(1)
+  end
+  luaunit.assertEquals(next, c_major)
 end

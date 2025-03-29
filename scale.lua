@@ -115,7 +115,7 @@ end
 ]]
 function Scale:circle_of_5ths_rotate(iterations)
   local total_alterations = self:count_alterations()+iterations
-  local rotation = ( (total_alterations + 5) % 12 ) - 5
+  local rotation = ( (total_alterations + 5) % 12 ) - 5 - self:count_alterations()
   if(rotation == 0) then
     return self
   elseif(rotation < 0) then
