@@ -93,14 +93,9 @@ function Scale:to_the_left_on_circle_of_5ths(iterations)
   if iterations == 0 then
     return self
   end
-  out = self:clone()
-  for i = 1, iterations do
-    out = out:rotate(4):add_alteration(4, -1)
-  end
-  if out:count_alterations() < -7 then
-    out = out:to_the_right_on_circle_of_5ths(12)
-  end
-  return out
+  return self:rotate(4)
+    :add_alteration(4, -1)
+    :to_the_left_on_circle_of_5ths(iterations -1)
 end
 
 --[[
@@ -110,26 +105,23 @@ function Scale:to_the_right_on_circle_of_5ths(iterations)
   if(iterations == 0) then
     return self
   end
-  out = self:clone()
-  for i = 1, iterations do
-    out = out:rotate(5):add_alteration(7, 1)
-  end
-  if out:count_alterations() > 7 then
-    out = out:to_the_left_on_circle_of_5ths(12)
-  end
-  return out
+  return self:rotate(5)
+    :add_alteration(7, 1)
+    :to_the_right_on_circle_of_5ths(iterations -1)
 end
 
 --[[
   Warning: only works for ionian scales
 ]]
 function Scale:circle_of_5ths_rotate(iterations)
-  if(iterations == 0) then
+  local total_alterations = self:count_alterations()+iterations
+  local rotation = ( (total_alterations + 5) % 12 ) - 5
+  if(rotation == 0) then
     return self
-  elseif(iterations < 0) then
-    return self:to_the_left_on_circle_of_5ths(-iterations)
-  elseif(iterations > 0) then
-    return self:to_the_right_on_circle_of_5ths(iterations)
+  elseif(rotation < 0) then
+    return self:to_the_left_on_circle_of_5ths(-rotation)
+  elseif(rotation > 0) then
+    return self:to_the_right_on_circle_of_5ths(rotation)
   else
     return "Error"
   end
